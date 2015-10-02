@@ -12,7 +12,7 @@ def test_get_tweets_formats_term(twitter):
 
     get_tweets('flask')
 
-    assert twitter.search.call_args == mock.call('#flask')
+    assert twitter.search.call_args == mock.call('flask')
 
 
 @mock.patch('twiki.app.twitter')
