@@ -69,3 +69,5 @@ Session.vim
 .netrwhist
 *~
 
+#config files
+auth_keys.py
