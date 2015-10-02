@@ -12,10 +12,7 @@ from wtforms.validators import DataRequired
 from .auth_keys import AuthKeys
 import tweepy
 import wikipedia
-from collections import namedtuple
 
-Tweet = namedtuple('Tweet', ['user', 'text', 'id'])
-WikiPage = namedtuple('WikiPage', ['title', 'summary', 'url'])
 
 app = Flask(__name__)
 app.config.from_object(AuthKeys)
