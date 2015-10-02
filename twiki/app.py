@@ -48,16 +48,7 @@ def search(term=None):
         return redirect(url_for('index'))
 
     tweets = get_tweets(term)
-
-    pages = []
-    for page in wikipedia.search(term):
-        try:
-            page = wikipedia.page(page)
-        except wikipedia.DisambiguationError:
-            pass
-        else:
-            pages.append(WikiPage(page.title, page.summary, page.url))
-
+    pages = get_pages(term)
     return render_template('display_results.html', tweets=tweets, pages=pages, term=term)
 
 
@@ -73,3 +64,16 @@ def tweets(term=None):
 def get_tweets(term):
     return [{'user': t.user.name, 'text': t.text, 'id': t.id}
             for t in twitter.search('#' + term)]
+
+
+def get_pages(term):
+    pages = []
+    for page in wikipedia.search(term):
+        try:
+            page = wikipedia.page(page)
+        except wikipedia.DisambiguationError:
+            pass
+        else:
+            pages.append(WikiPage(page.title, page.summary, page.url))
+
+    return pages
