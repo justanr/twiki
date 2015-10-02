@@ -4,7 +4,7 @@
     Unified search client for twitter and wiki
 """
 
-from flask import Flask, redirect, render_template, url_for
+from flask import Flask, redirect, render_template, url_for, flash, jsonify
 from flask_bootstrap import Bootstrap
 from flask_wtf import Form
 from wtforms import StringField
@@ -40,14 +40,16 @@ def index():
     return render_template('index.html', form=form)
 
 
-@app.route('/search/<term>/')
+@app.route('/search/')
+@app.route('/search/<term>')
 def search(term=None):
     if not term:
-        return 'Please enter a search term'
+        flash('Please enter a search term', 'warning')
+        return redirect(url_for('index'))
 
-    tweets = [Tweet(t.user.name, t.text, t.id) for t in twitter.search('#' + term)]
+    tweets = get_tweets(term)
+
     pages = []
-
     for page in wikipedia.search(term):
         try:
             page = wikipedia.page(page)
@@ -57,3 +59,17 @@ def search(term=None):
             pages.append(WikiPage(page.title, page.summary, page.url))
 
     return render_template('display_results.html', tweets=tweets, pages=pages, term=term)
+
+
+@app.route('/tweets/')
+@app.route('/tweets/<term>')
+def tweets(term=None):
+    if term is None:
+        return jsonify({'error': 'no search term provided'}), 400
+
+    return jsonify(tweets=get_tweets(term))
+
+
+def get_tweets(term):
+    return [{'user': t.user.name, 'text': t.text, 'id': t.id}
+            for t in twitter.search('#' + term)]

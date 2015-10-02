@@ -13,8 +13,8 @@
         <ul class="list-group">
             {% for tweet in tweets %}
             <li class="list-group-item">
-            <p><a href="https://twitter.com/{{tweet.user}}/status/{{tweet.id}}">{{ tweet.user }} said:</a></p>
-                <p>{{ tweet.text }}</p>
+            <p><a href="https://twitter.com/{{tweet['user']}}/status/{{tweet['id']}}">{{ tweet['user'] }} said:</a></p>
+                <p>{{ tweet['text'] }}</p>
             </li>
             {% else %}
             <li class="list-group-item list-group-item-info">
