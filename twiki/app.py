@@ -61,6 +61,15 @@ def tweets(term=None):
     return jsonify(tweets=get_tweets(term))
 
 
+@app.route('/pages/')
+@app.route('/pages/<term>')
+def pages(term=None):
+    if term is None:
+        return jsonify({'error': 'no search term provided'}), 400
+
+    return jsonify(pages=get_pages(term))
+
+
 def get_tweets(term):
     return [{'user': t.user.name, 'text': t.text, 'id': t.id}
             for t in twitter.search('#' + term)]
@@ -74,6 +83,20 @@ def get_pages(term):
         except wikipedia.DisambiguationError:
             pass
         else:
-            pages.append(WikiPage(page.title, page.summary, page.url))
+            pages.append(page)
 
-    return pages
+    return _transform_pages(pages)
+
+
+def _transform_pages(pages):
+    return [{'title': p.title, 'summary': shorten_summary(p.summary), 'url': p.url}
+            for p in pages]
+
+
+def shorten_summary(summary, word_limit=25):
+    if summary.count(' ') <= word_limit:
+        return summary
+
+    else:
+        cut_off_summary = summary.split()[:word_limit]
+        return '{0} ...'.format(' '.join(cut_off_summary))
