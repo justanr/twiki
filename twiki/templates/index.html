@@ -5,6 +5,7 @@
 {% block content %}
 <div class="jumbotron">
     <div class="container">
+        {{ util.flashed_messages() }}
         <h1>Ready to do a search?</h1>
         <p>Enter a search term below and we'll crawl twitter and wikipedia!</p>
         {{ wtf.quick_form(form) }}
