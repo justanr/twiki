@@ -7,8 +7,22 @@
 <div class="jumbotron">
     <div class="container">
         <h1>Search Results for: {{ term }}</h1>
-        <div class="col-md-6" ng-controller='TweetController as tweeter' id="tweets">
-            <a ng-click='tweeter.getTweets()'>Try me for tweets</a>
+        <div class="col-md-6" ng-controller='TweetController as tweeter' id="tweets"
+            ng-init='tweeter.getTweets()'>
+            <div ng-hide="tweeter.loaded" class="alert alert-info">
+                <p ng-hide="tweeter.loaded">Looking for tweets...</p>
+            </div>
+            <ul ng-show="tweeter.loaded && !tweeter.error" class="list-group">
+                <li class="list-group-item" ng-repeat="tweet in tweeter.tweets">
+                    <a href="{a tweet.url a}">
+                        {a tweet.user a} said:
+                    </a>
+                    <p>{a tweet.text a}</p>
+                </li>
+            </ul>
+            <div ng-show="tweeter.loaded && tweeter.error" class="alert alert-danger">
+                <p>{a vm.msg a}
+            </div>
         </div>
         <div class="col-md-6" ng-controller='WikiController as wikier' id='wiki'>
             <a ng-click='wikier.getPages()'>Try me for wiki pages</a>
