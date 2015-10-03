@@ -1,7 +1,7 @@
 """
     twiki
     ~~~~~
-    Unified search client for twitter and wiki
+    Unified search client for twitter and wikipedia
 """
 
 from flask import Flask, redirect, render_template, url_for, flash, jsonify
@@ -23,6 +23,13 @@ Bootstrap(app)
 tweepy_auth = tweepy.OAuthHandler(app.config['KEY'], app.config['SECRET'])
 twitter = tweepy.API(tweepy_auth)
 
+
+@app.after_request
+def allow_cors(resp):
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    resp.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS, PUT'
+    resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+    return resp
 
 class SearchForm(Form):
     term = StringField('term', validators=[DataRequired()])
