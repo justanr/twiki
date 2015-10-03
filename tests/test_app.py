@@ -8,11 +8,10 @@ except ImportError:
 
 
 def test_get_tweets_transforms_results():
-    user = mock.Mock()
-    user.name = 'fred'  # name is a field for Mock.__init__
-    tweets = mock.Mock(user=user, text='Some text', id=1)
+    user = mock.Mock(screen_name='fred')
+    tweets = mock.Mock(user=user, text='Some text', id_str='1')
 
-    assert transform_tweet(tweets) == {'user': 'fred', 'text': 'Some text', 'id': 1}
+    assert transform_tweet(tweets) == {'user': 'fred', 'text': 'Some text', 'id': '1'}
 
 
 @mock.patch('twiki.app.wikipedia')
