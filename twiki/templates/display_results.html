@@ -6,36 +6,12 @@
 {% block content %}
 <div class="jumbotron">
     <div class="container">
-    </div>
-    <div class="container">
         <h1>Search Results for: {{ term }}</h1>
-        <div class="col-md-6">
-        <ul class="list-group">
-            {% for tweet in tweets %}
-            <li class="list-group-item">
-            <p><a href="https://twitter.com/{{tweet['user']}}/status/{{tweet['id']}}">{{ tweet['user'] }} said:</a></p>
-                <p>{{ tweet['text'] }}</p>
-            </li>
-            {% else %}
-            <li class="list-group-item list-group-item-info">
-                Unbelievable! There are no tweets!
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="col-md-6" ng-controller='TweetController as tweeter' id="tweets">
+            <a ng-click='tweeter.getTweets()'>Try me for tweets</a>
         </div>
-        <div class="col-md-6">
-        <ul class="list-group">
-            {% for page in pages %}
-            <li class="list-group-item">
-                <h2><a href="{{ page['url'] }}">{{ page['title'] }}</a></h2>
-                <p>{{ page['summary'] }}</p>
-            </li>
-            {% else %}
-            <li class="list-group-item list-group-item-info">
-                Unbelievable! There are no Wikipedia pages!
-            </li>
-            {% endfor %}
-        </ul>
+        <div class="col-md-6" ng-controller='WikiController as wikier' id='wiki'>
+            <a ng-click='wikier.getPages()'>Try me for wiki pages</a>
         </div>
     </div>
 </div>

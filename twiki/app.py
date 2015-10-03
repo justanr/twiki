@@ -40,7 +40,9 @@ def index():
     form = SearchForm()
 
     if form.validate_on_submit():
-        return redirect(url_for('search', term=form.term.data))
+        term = form.term.data
+        anchor = '#/#{0}'.format(term)
+        return redirect(url_for('search', term=term) + anchor)
     return render_template('index.html', form=form)
 
 
@@ -51,8 +53,8 @@ def search(term=None):
         flash('Please enter a search term', 'warning')
         return redirect(url_for('index'))
 
-    tweets = get_tweets(term)
-    pages = get_pages(term)
+    tweets = []
+    pages = []
     return render_template('display_results.html', tweets=tweets, pages=pages, term=term)
 
 
