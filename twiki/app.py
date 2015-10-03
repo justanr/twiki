@@ -68,9 +68,10 @@ def pages(term=None):
 
 
 def get_tweets(term):
-    return [{'user': t.user.name, 'text': t.text, 'id': t.id}
-            for t in twitter.search(term)]
+    return _transform_tweets(twitter.search(term))
 
+def _transform_tweets(tweets):
+    return [{'user': t.user.name, 'text': t.text, 'id': t.id} for t in tweets]
 
 def get_pages(term):
     pages = []

@@ -1,4 +1,5 @@
-from twiki.app import get_tweets, get_pages, _transform_pages, shorten_summary
+from twiki.app import (get_pages, _transform_pages, shorten_summary,
+                       _transform_tweets)
 
 try:
     from unittest import mock
@@ -6,25 +7,12 @@ except ImportError:
     import mock
 
 
-@mock.patch('twiki.app.twitter')
-def test_get_tweets_formats_term(twitter):
-    twitter.search.return_value = []
-
-    get_tweets('flask')
-
-    assert twitter.search.call_args == mock.call('flask')
-
-
-@mock.patch('twiki.app.twitter')
-def test_get_tweets_transforms_results(twitter):
+def test_get_tweets_transforms_results():
     user = mock.Mock()
     user.name = 'fred'  # name is a field for Mock.__init__
-    twitter.search.return_value = [mock.Mock(user=user,
-                                             text='Some text', id=1)]
+    tweets = [mock.Mock(user=user, text='Some text', id=1)]
 
-    tweets = get_tweets('something')
-
-    assert tweets == [{'user': 'fred', 'text': 'Some text', 'id': 1}]
+    assert _transform_tweets(tweets) == [{'user': 'fred', 'text': 'Some text', 'id': 1}]
 
 
 @mock.patch('twiki.app.wikipedia')
@@ -57,7 +45,7 @@ def test_shorten_summary_with_no_summary():
     assert shorten_summary('') == ''
 
 
-def test_shorten_summary_wiyth_long_summary():
+def test_shorten_summary_with_long_summary():
     summary = 'a ' * 30
     expected = '{0} ...'.format(' '.join(['a'] * 25))
 
