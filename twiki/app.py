@@ -68,27 +68,28 @@ def pages(term=None):
 
 
 def get_tweets(term):
-    return _transform_tweets(twitter.search(term))
+    return [transform_tweet(tweet) for tweet in twitter.search(term)]
 
-def _transform_tweets(tweets):
-    return [{'user': t.user.name, 'text': t.text, 'id': t.id} for t in tweets]
+
+def transform_tweet(t):
+    return {'user': t.user.name, 'text': t.text, 'id': t.id}
+
 
 def get_pages(term):
-    pages = []
-    for page in wikipedia.search(term):
-        try:
-            page = wikipedia.page(page)
-        except wikipedia.DisambiguationError:
-            pass
-        else:
-            pages.append(page)
-
-    return _transform_pages(pages)
+    pages = (get_page_contents(title) for title in wikipedia.search(term))
+    return [transform_page(page) for page in pages if page]
 
 
-def _transform_pages(pages):
-    return [{'title': p.title, 'summary': shorten_summary(p.summary), 'url': p.url}
-            for p in pages]
+def get_page_contents(title):
+    try:
+        return wikipedia.page(title)
+    except wikipedia.DisambiguationError:
+        pass
+
+
+def transform_page(page):
+    summary = shorten_summary(page.summary)
+    return {'title': page.title, 'summary': summary, 'url': page.url}
 
 
 def shorten_summary(summary, word_limit=25):

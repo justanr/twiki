@@ -1,5 +1,5 @@
-from twiki.app import (get_pages, _transform_pages, shorten_summary,
-                       _transform_tweets)
+from twiki.app import (get_pages, transform_page, shorten_summary,
+                       transform_tweet)
 
 try:
     from unittest import mock
@@ -10,9 +10,9 @@ except ImportError:
 def test_get_tweets_transforms_results():
     user = mock.Mock()
     user.name = 'fred'  # name is a field for Mock.__init__
-    tweets = [mock.Mock(user=user, text='Some text', id=1)]
+    tweets = mock.Mock(user=user, text='Some text', id=1)
 
-    assert _transform_tweets(tweets) == [{'user': 'fred', 'text': 'Some text', 'id': 1}]
+    assert transform_tweet(tweets) == {'user': 'fred', 'text': 'Some text', 'id': 1}
 
 
 @mock.patch('twiki.app.wikipedia')
@@ -25,14 +25,13 @@ def test_basic_assumption(wikipedia):
     assert pages == [dict(title='fred', summary='freds', url='fred')]
 
 
-def test_transform_pages():
-    pages = [mock.Mock(title='Fred Fredenheimer', summary='Fred Fredenheimer...',
-                       url='Fred_Fredenheimer')]
+def test_transform_page():
+    pages = mock.Mock(title='Fred Fredenheimer', summary='Fred Fredenheimer...',
+                      url='Fred_Fredenheimer')
 
-    transformed = _transform_pages(pages)
-
-    assert transformed == [dict(title='Fred Fredenheimer', url='Fred_Fredenheimer',
-                                summary='Fred Fredenheimer...')]
+    assert transform_page(pages) == {'title': 'Fred Fredenheimer',
+                                     'url': 'Fred_Fredenheimer',
+                                     'summary': 'Fred Fredenheimer...'}
 
 
 def test_shorten_summary_with_short():
