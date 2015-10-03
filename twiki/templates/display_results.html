@@ -7,16 +7,17 @@
 <div class="jumbotron">
     <div class="container">
         <h1>Search Results for: {{ term }}</h1>
+
         <div class="col-md-6" ng-controller='TweetController as tweeter' id="tweets"
             ng-init='tweeter.getTweets()'>
             <div ng-hide="tweeter.loaded" class="alert alert-info">
-                <p ng-hide="tweeter.loaded">Looking for tweets...</p>
+                <p>Looking for tweets...</p>
             </div>
             <ul ng-show="tweeter.loaded && !tweeter.error" class="list-group">
                 <li class="list-group-item" ng-repeat="tweet in tweeter.tweets">
-                    <a href="{a tweet.url a}">
+                <h2><a href="{a tweet.url a}">
                         {a tweet.user a} said:
-                    </a>
+                </a></h2>
                     <p>{a tweet.text a}</p>
                 </li>
             </ul>
@@ -24,8 +25,21 @@
                 <p>{a vm.msg a}
             </div>
         </div>
-        <div class="col-md-6" ng-controller='WikiController as wikier' id='wiki'>
-            <a ng-click='wikier.getPages()'>Try me for wiki pages</a>
+
+        <div class="col-md-6" ng-controller='WikiController as wikier' id='wiki'
+            ng-init='wikier.getPages()'>
+            <div ng-hide='wikier.pages.length > 0 || wikier.error' class="alert alert-info">
+                <p>Looking for wikipedia pages...</p>
+            </div>
+            <ul ng-show='wikier.loaded && !wikier.error' class='list-group'>
+                <li class='list-group-item' ng-repeat='page in wikier.pages'>
+                    <h2><a href="{a page.url a}">{a page.title a}</a></h2>
+                    <p>{a page.summary a}</p>
+                </li>
+            </ul>
+            <div ng-show='wikier.error' class='alert alert-danger'>
+                <p>{a wikier.msg a}</p>
+            </div>
         </div>
     </div>
 </div>
