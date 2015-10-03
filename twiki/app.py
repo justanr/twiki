@@ -81,7 +81,7 @@ def get_tweets(term):
 
 
 def transform_tweet(t):
-    return {'user': t.user.name, 'text': t.text, 'id': t.id}
+    return {'user': t.user.screen_name, 'text': t.text, 'id': t.id_str}
 
 
 def get_pages(term):
