@@ -38,6 +38,11 @@ function WikiPageService($http) {
 }
 
 
+function ResultNameController($location) {
+    vm = this;
+    vm.term = $location.hash();
+}
+
 function TweetController($location, TweetService) {
     var vm = this;
     vm.loaded = false;
@@ -95,3 +100,4 @@ app.factory('TweetService', TweetService);
 app.factory('WikiPageService', WikiPageService);
 app.controller('TweetController', TweetController);
 app.controller('WikiController', WikiController);
+app.controller('ResultNameController', ResultNameController);
