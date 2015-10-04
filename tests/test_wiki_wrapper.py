@@ -79,6 +79,7 @@ def test_wikipedia_get_page_receives_disambiguation(fakewiki):
         wiki.get_page('Whooops...')
 
     assert excinfo.value.msg == 'This is a disambiguation page'
+    assert excinfo.value.code == 301
 
 
 def test_shorten_summary_with_short():

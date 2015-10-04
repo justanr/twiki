@@ -60,7 +60,7 @@ class Wikipedia(object):
         try:
             return self._wikipedia.page(title)
         except wikipedia.DisambiguationError as e:
-            self._throw_from_wikipedia_error(e, "This is a disambiguation page")
+            self._throw_from_wikipedia_error(e, "This is a disambiguation page", 301)
         except wikipedia.WikipediaException as e:
             self._throw_from_wikipedia_error(e, "Couldn't find wikipedia page")
 
@@ -83,10 +83,10 @@ class Wikipedia(object):
         return url.format(title.replace(' ', '_'))
 
     @staticmethod
-    def _throw_from_wikipedia_error(e, msg=None):
+    def _throw_from_wikipedia_error(e, msg=None, code=500):
         """Raises an application specific error from either the provided message
         or the error passed to it
         """
         if msg is None:
             msg = e.error
-        raise WikipediaError(msg)
+        raise WikipediaError(msg, code)
