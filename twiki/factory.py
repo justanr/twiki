@@ -1,8 +1,12 @@
+from .app import backend, frontend
 from .auth_keys import AuthKeys
 from .config import configs, DefaultConfig
+from .exts import twitter
+from .twitter import TwitterError
+from .wiki import WikipediaError
 
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from flask_bootstrap import Bootstrap
 
 
@@ -12,6 +16,8 @@ def create_app(config_name=None):
 
     config_app(app, config_name)
     init_exts(app)
+    register_blueprints(app)
+    register_handlers(app)
 
     return app
 
@@ -39,3 +45,23 @@ def get_config_from_env(default='default'):
 
 def init_exts(app):
     Bootstrap(app)
+    twitter.init_app(app)
+
+
+def register_handlers(app):
+    @app.after_request
+    def allow_cors(resp):
+        resp.headers['Access-Control-Allow-Origin'] = '*'
+        resp.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS, PUT'
+        resp.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
+        return resp
+
+    @app.errorhandler(TwitterError)
+    @app.errorhandler(WikipediaError)
+    def handle_error(err):
+        return jsonify(msg=err.msg), err.code
+
+
+def register_blueprints(app):
+    app.register_blueprint(frontend)
+    app.register_blueprint(backend, url_prefix='/api')

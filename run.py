@@ -1,3 +1,5 @@
-from twiki.app import app
+from twiki.factory import create_app
 
-app.run(debug=True)
+if __name__ == '__main__':
+    app = create_app('dev')
+    app.run('0.0.0.0')
