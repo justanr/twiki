@@ -37,6 +37,7 @@ def search():
     return render_template('display_results.html')
 
 
+@backend.route('/tweets/')
 @backend.route('/tweets/<term>')
 def tweets(term=None):
     if term is None:
@@ -45,6 +46,7 @@ def tweets(term=None):
     return jsonify(tweets=twitter.search(term))
 
 
+@backend.route('/titles/')
 @backend.route('/titles/<term>')
 def titles(term=None):
     if term is None:
@@ -53,6 +55,7 @@ def titles(term=None):
     return jsonify(titles=wiki.search(term))
 
 
+@backend.route('/page/')
 @backend.route('/page/<title>')
 def page(title=None):
     if title is None:
