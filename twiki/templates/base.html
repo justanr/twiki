@@ -41,8 +41,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
     <script>
-        var tweet_url = "/api/tweets/";
-        var title_url = "/api/titles/";
-        var page_url  = "/api/page/"; 
+        var tweet_url = "{{ url_for('backend.tweets') }}";
+        var title_url = "{{ url_for('backend.titles') }}";
+        var page_url  = "{{ url_for('backend.page') }}"; 
     </script>
 {% endblock %}
