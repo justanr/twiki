@@ -27,14 +27,13 @@
         </div>
 
         <div class="col-md-6" ng-controller='WikiController as wikier' id='wiki'
-            ng-init='wikier.getPages()'>
-            <div ng-hide='wikier.pages.length > 0 || wikier.error' class="alert alert-info">
+            ng-init='wikier.getTitles()'>
+            <div ng-hide='wikier.titles.length > 0 || wikier.error' class="alert alert-info">
                 <p>Looking for wikipedia pages...</p>
             </div>
             <ul ng-show='wikier.loaded && !wikier.error' class='list-group'>
-                <li class='list-group-item' ng-repeat='page in wikier.pages'>
-                    <h2><a href="{a page.url a}">{a page.title a}</a></h2>
-                    <p>{a page.summary a}</p>
+                <li class='list-group-item' ng-repeat='title in wikier.titles'>
+                    <h2><a href="{a title.url a}">{a title.title a}</a></h2>
                 </li>
             </ul>
             <div ng-show='wikier.error' class='alert alert-danger'>

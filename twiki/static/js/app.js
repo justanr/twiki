@@ -10,17 +10,10 @@ function TweetService($http) {
     var TweetService = {};
 
     function tweets(term) {
-        return $http.get('/tweets/' + term);
+        return $http.get(tweet_url + term);
     };
     
-    function provideLinkURL(tweet) {
-        tweet.url = 'https://twitter.com/' + tweet.user + '/status/' + tweet.id;
-        return tweet;
-    };
-
-
     TweetService.getTweets = tweets;
-    TweetService.provideLinkURL = provideLinkURL;
     return TweetService;
 
 };
@@ -29,11 +22,16 @@ function TweetService($http) {
 function WikiPageService($http) {
     var WikiPageService = {};
 
-    function pages(term) {
-        return $http.get('/pages/' + term);
+    function getTitles(term) {
+        return $http.get(title_url + term);
     };
 
-    WikiPageService.getPages = pages;
+    function getPage(title) {
+        return $http.get(page_url + title)
+    }
+
+    WikiPageService.getTitles = getTitles;
+    WikiPageService.getPage = getPage
     return WikiPageService
 }
 
@@ -50,7 +48,7 @@ function TweetController($location, TweetService) {
             .success(function(data, status, headers, config) {
                 console.log('loaded tweets');
                 vm.loaded = true;
-                vm.tweets = data.tweets.map(TweetService.provideLinkURL)
+                vm.tweets = data.tweets
             })
             .error(function(data, status, headers, config) {
                 vm.loaded = true;
@@ -64,13 +62,13 @@ function WikiController($location, WikiPageService) {
     var vm = this;
     vm.loaded = false;
     vm.error = false;
-    vm.pages = []
+    vm.titles = []
 
-    this.getPages = function() {
+    this.getTitles = function() {
         var term = $location.hash();
-        return WikiPageService.getPages(term)
+        return WikiPageService.getTitles(term)
             .success(function(data, status, headers, config) {
-                vm.pages = data.pages;
+                vm.titles = data.titles;
                 vm.loaded = true;
             })
             .error(function(data, status, headers, config) {
@@ -79,6 +77,8 @@ function WikiController($location, WikiPageService) {
                 vm.msg = data.msg;
             });
     };
+
+
 };
 
 app.factory('TweetService', TweetService);
