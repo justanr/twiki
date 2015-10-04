@@ -51,7 +51,6 @@ function TweetController($location, TweetService) {
                 vm.tweets = data.tweets
             })
             .error(function(data, status, headers, config) {
-                vm.loaded = true;
                 vm.error = true;
                 vm.msg = data.msg;
             });
@@ -72,13 +71,10 @@ function WikiController($location, WikiPageService) {
                 vm.loaded = true;
             })
             .error(function(data, status, headers, config) {
-                vm.loaded = true;
                 vm.error = true;
                 vm.msg = data.msg;
             });
     };
-
-
 };
 
 app.factory('TweetService', TweetService);

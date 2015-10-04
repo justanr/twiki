@@ -10,10 +10,10 @@
 
         <div class="col-md-6" ng-controller='TweetController as tweeter' id="tweets"
             ng-init='tweeter.getTweets()'>
-            <div ng-hide="tweeter.loaded" class="alert alert-info">
+            <div ng-hide="tweeter.loaded || tweeter.error" class="alert alert-info">
                 <p>Looking for tweets...</p>
             </div>
-            <ul ng-show="tweeter.loaded && !tweeter.error" class="list-group">
+            <ul ng-show="tweeter.loaded" class="list-group">
                 <li class="list-group-item" ng-repeat="tweet in tweeter.tweets">
                 <h2><a href="{a tweet.url a}">
                         {a tweet.user a} said:
@@ -21,8 +21,8 @@
                     <p>{a tweet.text a}</p>
                 </li>
             </ul>
-            <div ng-show="tweeter.loaded && tweeter.error" class="alert alert-danger">
-                <p>{a vm.msg a}
+            <div ng-show="tweeter.error" class="alert alert-danger">
+                <p>{a tweeter.msg a}
             </div>
         </div>
 
@@ -31,7 +31,7 @@
             <div ng-hide='wikier.titles.length > 0 || wikier.error' class="alert alert-info">
                 <p>Looking for wikipedia pages...</p>
             </div>
-            <ul ng-show='wikier.loaded && !wikier.error' class='list-group'>
+            <ul ng-show='wikier.loaded' class='list-group'>
                 <li class='list-group-item' ng-repeat='title in wikier.titles'>
                     <h2><a href="{a title.url a}">{a title.title a}</a></h2>
                 </li>
