@@ -1,26 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}Results for: {{term}}{% endblock %}
-
+{% block title %}{{ super() }} Results!{% endblock %}
 
 {% block content %}
 <div class="jumbotron">
     <div class="container">
-        <h1>Search Results for: {{ term }}</h1>
+        <h1>Search Results</h1>
 
         <div class="col-md-6" ng-controller='TweetController as tweeter' id="tweets"
             ng-init='tweeter.getTweets()'>
+            <h2>Tweets:</h2>
             <div ng-hide="tweeter.loaded || tweeter.error" class="alert alert-info">
                 <p>Looking for tweets...</p>
             </div>
-            <ul ng-show="tweeter.loaded" class="list-group">
+            <ul ng-show="tweeter.loaded && tweeter.tweets.length > 0" class="list-group">
                 <li class="list-group-item" ng-repeat="tweet in tweeter.tweets">
-                <h2><a href="{a tweet.url a}">
+                <h3><a href="{a tweet.url a}">
                         {a tweet.user a} said:
-                </a></h2>
+                </a></h3>
                     <p>{a tweet.text a}</p>
                 </li>
             </ul>
+            <div ng-show='tweeter.loaded && tweeter.tweets.length < 1' class='alert alert-info'>
+                <p>Unbelievable! Couldn't find any tweets for that!</p>
+            </div>
             <div ng-show="tweeter.error" class="alert alert-danger">
                 <p>{a tweeter.msg a}
             </div>
@@ -28,14 +31,18 @@
 
         <div class="col-md-6" ng-controller='WikiController as wikier' id='wiki'
             ng-init='wikier.getTitles()'>
-            <div ng-hide='wikier.titles.length > 0 || wikier.error' class="alert alert-info">
+            <h2>Wikipedia Pages:</h2>
+            <div ng-hide='wikier.loaded || wikier.error' class="alert alert-info">
                 <p>Looking for wikipedia pages...</p>
             </div>
-            <ul ng-show='wikier.loaded' class='list-group'>
-                <li class='list-group-item' ng-repeat='title in wikier.titles'>
-                    <h2><a href="{a title.url a}">{a title.title a}</a></h2>
+            <ul ng-show='wikier.loaded && wikier.titles.length > 0' class='list-group'>
+                <li class='list-group-item' ng-repeat='title in wikier.titles' id='{a title.title a}'>
+                    <h3><a href="{a title.url a}">{a title.title a}</a></h3>
                 </li>
             </ul>
+            <div ng-show='wikier.loaded && wikier.titles.length < 1' class='alert alert-info'>
+                <p>Unbelievable! Couldn't find any wikipedia pages for that!</p>
+            </div>
             <div ng-show='wikier.error' class='alert alert-danger'>
                 <p>{a wikier.msg a}</p>
             </div>
