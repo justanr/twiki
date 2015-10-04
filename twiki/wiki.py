@@ -25,7 +25,6 @@ class Wikipedia(object):
         "Finds wikipedia page titles and returns dictionaries of title and url."
         return [self._build_basic_info(title) for title in self._search(term)]
 
-
     def get_page(self, title):
         """Finds a wikipedia page and returns a dictionary of title, url and
         shortened summary.
@@ -50,7 +49,7 @@ class Wikipedia(object):
         try:
             return self._wikipedia.search(term)
         except wikipedia.WikipediaException as e:
-            self._throw_from_wikipedia_error(e, "Can't connect to wikipedia right now")
+            self._throw_from_wikipedia_error(e, "Sorry, we're having trouble with Wikipedia right now.")
 
     def _build_basic_info(self, title):
         return {'title': title, 'url': self._build_url(title)}

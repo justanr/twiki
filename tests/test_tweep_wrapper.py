@@ -24,7 +24,7 @@ def test_transform_tweepy_error():
     with pytest.raises(TwitterError) as excinfo:
         Twitter._throw_from_tweepy_error(e)
 
-    assert excinfo.value.msg == "Something bad happened" and excinfo.value.code == 400
+    assert excinfo.value.msg == "Something bad happened" and excinfo.value.code == 500
 
 
 def test_transform_tweets():

@@ -41,7 +41,7 @@ def search():
 @backend.route('/tweets/<term>')
 def tweets(term=None):
     if term is None:
-        return jsonify({'msg': 'no search term provided'}), 400
+        return jsonify({'msg': 'No search term provided'}), 400
 
     return jsonify(tweets=twitter.search(term))
 
@@ -50,7 +50,7 @@ def tweets(term=None):
 @backend.route('/titles/<term>')
 def titles(term=None):
     if term is None:
-        return jsonify({'msg': 'no search term provided'}), 400
+        return jsonify({'msg': 'No search term provided'}), 400
 
     return jsonify(titles=wiki.search(term))
 
@@ -59,5 +59,5 @@ def titles(term=None):
 @backend.route('/page/<title>')
 def page(title=None):
     if title is None:
-        return jsonify({'msg': 'no page title provided'}), 400
+        return jsonify({'msg': 'No page title provided'}), 400
     return jsonify(page=wiki.get_page(title))

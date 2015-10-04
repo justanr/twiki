@@ -27,7 +27,7 @@ class Twitter(object):
 
     def init_app(self, app):
         self._api = API(OAuthHandler(app.config['TWITTER_KEY'],
-                        app.config['TWITTER_SECRET']))
+                                     app.config['TWITTER_SECRET']))
 
     def search(self, term):
         if self._api is None:
@@ -40,7 +40,7 @@ class Twitter(object):
         try:
             return self._api.search(term)
         except TweepError as e:
-            self._throw_from_tweepy_error(e)
+            self._throw_from_tweepy_error(e, "Sorry, we're having trouble with Twitter right now.")
 
     def _format(self, tweet):
         return {'user': tweet.user.screen_name,
@@ -57,4 +57,5 @@ class Twitter(object):
         "Converts a tweepy error into an application specific error"
         if msg is None:
             msg = e.reason
-        raise TwitterError(msg, e.response.status_code)
+
+        raise TwitterError(msg, 500)
