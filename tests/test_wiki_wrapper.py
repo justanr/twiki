@@ -1,6 +1,5 @@
 from twiki.wiki import Wikipedia, WikipediaError
 import wikipedia
-from wikipedia.exceptions import WikipediaException
 import pytest
 from collections import namedtuple
 
@@ -24,7 +23,7 @@ def fakepage():
 
 
 def test_convert_wiki_error():
-    e = WikipediaException("Something bad happened")
+    e = wikipedia.WikipediaException("Something bad happened")
     with pytest.raises(WikipediaError) as excinfo:
         Wikipedia._throw_from_wikipedia_error(e)
 
@@ -40,7 +39,7 @@ def test_wikipedia_search_happy_path(fakewiki, fakepage):
 
 
 def test_wikipedia_search_blows_up(fakewiki):
-    fakewiki.search.side_effect = WikipediaException('Whoops..')
+    fakewiki.search.side_effect = wikipedia.WikipediaException('Whoops..')
     wiki = Wikipedia(fakewiki)
 
     with pytest.raises(WikipediaError):
@@ -65,12 +64,21 @@ def test_wikipedia_get_page_happy_path(fakewiki, fakepage):
 
 
 def test_wikipedia_get_page_blows_up(fakewiki):
-    fakewiki = mock.create_autospec(wikipedia)
     fakewiki.page.side_effect = wikipedia.WikipediaException('...')
     wiki = Wikipedia(fakewiki)
 
     with pytest.raises(WikipediaError):
         wiki.get_page('')
+
+
+def test_wikipedia_get_page_receives_disambiguation(fakewiki):
+    fakewiki.page.side_effect = wikipedia.DisambiguationError('...', '...')
+    wiki = Wikipedia(fakewiki)
+
+    with pytest.raises(WikipediaError) as excinfo:
+        wiki.get_page('Whooops...')
+
+    assert excinfo.value.msg == 'This is a disambiguation page'
 
 
 def test_shorten_summary_with_short():

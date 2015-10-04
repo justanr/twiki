@@ -59,6 +59,8 @@ class Wikipedia(object):
         if it can't."""
         try:
             return self._wikipedia.page(title)
+        except wikipedia.DisambiguationError as e:
+            self._throw_from_wikipedia_error(e, "This is a disambiguation page")
         except wikipedia.WikipediaException as e:
             self._throw_from_wikipedia_error(e, "Couldn't find wikipedia page")
 
