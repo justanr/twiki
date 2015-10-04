@@ -1,5 +1,7 @@
 var app = angular.module('app', [])
 
+
+
 app.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{a');
     $interpolateProvider.endSymbol('a}');
@@ -35,6 +37,7 @@ function WikiPageService($http) {
     return WikiPageService
 }
 
+
 function TweetController($location, TweetService) {
     var vm = this;
     vm.loaded = false;
@@ -61,13 +64,13 @@ function WikiController($location, WikiPageService) {
     var vm = this;
     vm.loaded = false;
     vm.error = false;
-    vm.titles = []
+    vm.pages = []
 
     this.getTitles = function() {
         var term = $location.hash();
         return WikiPageService.getTitles(term)
             .success(function(data, status, headers, config) {
-                vm.titles = data.titles;
+                vm.pages = data.titles;
                 vm.loaded = true;
             })
             .error(function(data, status, headers, config) {
@@ -75,6 +78,17 @@ function WikiController($location, WikiPageService) {
                 vm.msg = data.msg;
             });
     };
+
+    this.getPage = function(page) {
+        console.log("Loading summary for " + page.title);
+        return WikiPageService.getPage(page.title)
+            .success(function(data, status, headers, config) {
+                page.summary = data.page.summary
+            })
+            .error(function(data, status, headers, config) {
+                page.summary = data.msg
+            });
+    }
 };
 
 app.factory('TweetService', TweetService);

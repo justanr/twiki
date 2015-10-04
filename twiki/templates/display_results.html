@@ -35,9 +35,11 @@
             <div ng-hide='wikier.loaded || wikier.error' class="alert alert-info">
                 <p>Looking for wikipedia pages...</p>
             </div>
-            <ul ng-show='wikier.loaded && wikier.titles.length > 0' class='list-group'>
-                <li class='list-group-item' ng-repeat='title in wikier.titles' id='{a title.title a}'>
-                    <h3><a href="{a title.url a}">{a title.title a}</a></h3>
+            <ul ng-show='wikier.loaded && wikier.pages.length > 0' class='list-group'>
+                <li class='list-group-item' ng-repeat='page in wikier.pages'>
+                    <h3><a href="{a page.url a}">{a page.title a}</a></h3>
+                    <p ng-if="!page.summary">Loading summary...</p>
+                    <p ng-init="wikier.getPage(page)">{a page.summary a}</p>
                 </li>
             </ul>
             <div ng-show='wikier.loaded && wikier.titles.length < 1' class='alert alert-info'>
