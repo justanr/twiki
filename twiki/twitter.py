@@ -42,13 +42,19 @@ class Twitter(object):
         except TweepError as e:
             self._throw_from_tweepy_error(e)
 
-    @staticmethod
-    def _format(tweet):
+    def _format(self, tweet):
         return {'user': tweet.user.screen_name,
                 'text': tweet.text,
-                'id': tweet.id_str}
+                'url': self._build_url(tweet.user.screen_name, tweet.id_str)
+                }
 
     @staticmethod
-    def _throw_from_tweepy_error(e):
+    def _build_url(username, status_id):
+        return 'https://twitter.com/{0}/status/{1}'.format(username, status_id)
+
+    @staticmethod
+    def _throw_from_tweepy_error(e, msg=None):
         "Converts a tweepy error into an application specific error"
-        raise TwitterError(e.reason, e.response.status_code)
+        if msg is None:
+            msg = e.reason
+        raise TwitterError(msg, e.response.status_code)

@@ -30,7 +30,8 @@ def test_transform_tweepy_error():
 def test_transform_tweets():
     tweet = mock.Mock(user=mock.Mock(screen_name='Fred'), text='Some Text', id_str='1')
 
-    assert Twitter._format(tweet) == {'user': 'Fred', 'text': 'Some Text', 'id': '1'}
+    assert Twitter()._format(tweet) == {'user': 'Fred', 'text': 'Some Text',
+                                        'url': 'https://twitter.com/Fred/status/1'}
 
 
 def test_twitter_search_happy_path():
@@ -43,7 +44,8 @@ def test_twitter_search_happy_path():
     tweets = twitter.search('Fred')
 
     assert api.search.call_args == mock.call('Fred')
-    assert tweets == [{'user': 'Fred', 'text': 'Some Text', 'id': '1'}]
+    assert tweets == [{'user': 'Fred', 'text': 'Some Text',
+                       'url': 'https://twitter.com/Fred/status/1'}]
 
 
 def test_twitter_search_throws_error():
