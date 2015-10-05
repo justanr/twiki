@@ -9,6 +9,7 @@ from flask_wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from .exts import twitter, wiki
+from .utils import encode_term
 
 
 frontend = Blueprint('frontend', __name__)
@@ -26,8 +27,7 @@ def index():
     form = SearchForm()
 
     if form.validate_on_submit():
-        term = form.term.data
-        anchor = '#/#{0}'.format(term)
+        anchor = '#/#{0}'.format(encode_term(form.term.data))
         return redirect(url_for('.search') + anchor)
     return render_template('index.html', form=form)
 

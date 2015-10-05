@@ -43,21 +43,27 @@ function WikiPageService($http) {
 }
 
 
-function ResultNameController($location) {
-    vm = this;
-    vm.term = $location.hash();
+function TermService($location) {
+    var TermService = {};
+
+    TermService.term = $location.hash().split('+').join(' ');
+    return TermService;
 }
 
-function TweetController($location, TweetService) {
+function ResultNameController(TermService) {
+    vm = this;
+    vm.term = TermService.term;
+}
+
+function TweetController(TermService, TweetService) {
     var vm = this;
     vm.loaded = false;
     vm.error = false;
     vm.tweets = [];
 
     function getTweets() {
-        var term = $location.hash();
         console.log('finding tweets');
-        return TweetService.getTweets(term)
+        return TweetService.getTweets(TermService.term)
             .success(function(data, status, headers, config) {
                 console.log('loaded tweets');
                 vm.loaded = true;
@@ -72,15 +78,14 @@ function TweetController($location, TweetService) {
     getTweets();
 };
 
-function WikiController($location, WikiPageService) {
+function WikiController(TermService, WikiPageService) {
     var vm = this;
     vm.loaded = false;
     vm.error = false;
     vm.pages = []
 
     function getTitles() {
-        var term = $location.hash();
-        return WikiPageService.getTitles(term)
+        return WikiPageService.getTitles(TermService.term)
             .success(function(data, status, headers, config) {
                 vm.pages = data.titles;
                 vm.loaded = true;
@@ -111,6 +116,7 @@ function WikiController($location, WikiPageService) {
 
 app.factory('TweetService', TweetService);
 app.factory('WikiPageService', WikiPageService);
+app.factory('TermService', TermService);
 app.controller('TweetController', TweetController);
 app.controller('WikiController', WikiController);
 app.controller('ResultNameController', ResultNameController);
