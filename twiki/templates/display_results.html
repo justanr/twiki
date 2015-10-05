@@ -7,8 +7,7 @@
     <div class="container">
         <h1 ng-controller="ResultNameController as result">Search Results {a result.term a}</h1>
 
-        <div class="col-md-6" ng-controller='TweetController as tweeter' id="tweets"
-            ng-init='tweeter.getTweets()'>
+        <div class="col-md-6" ng-controller='TweetController as tweeter' id="tweets">
             <h2>Tweets:</h2>
             <div ng-hide="tweeter.loaded || tweeter.error" class="alert alert-info">
                 <p>Looking for tweets...</p>
@@ -29,8 +28,7 @@
             </div>
         </div>
 
-        <div class="col-md-6" ng-controller='WikiController as wikier' id='wiki'
-            ng-init='wikier.getTitles()'>
+        <div class="col-md-6" ng-controller='WikiController as wikier' id='wiki'>
             <h2>Wikipedia Pages:</h2>
             <div ng-hide='wikier.loaded || wikier.error' class="alert alert-info">
                 <p>Looking for wikipedia pages...</p>
@@ -39,7 +37,7 @@
                 <li class='list-group-item' ng-repeat='page in wikier.pages'>
                     <h3><a href="{a page.url a}">{a page.title a}</a></h3>
                     <p ng-if="!page.summary">Loading summary...</p>
-                    <p ng-init="wikier.getPage(page)">{a page.summary a}</p>
+                    <p ng-if="page.summary">{a page.summary a}</p>
                 </li>
             </ul>
             <div ng-show='wikier.loaded && wikier.titles.length < 1' class='alert alert-info'>

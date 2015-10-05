@@ -3,10 +3,15 @@ var app = angular.module('app', [])
 
 
 app.config(function($interpolateProvider) {
+    // change up angular's templating syntax to avoid
+    // collisions with Jinja2
     $interpolateProvider.startSymbol('{a');
     $interpolateProvider.endSymbol('a}');
 });
 
+
+// tweet_url, page_url and title_url are defined in the base template
+// by Flask's url_for
 
 function TweetService($http) {
     var TweetService = {};
@@ -49,7 +54,7 @@ function TweetController($location, TweetService) {
     vm.error = false;
     vm.tweets = [];
 
-    this.getTweets = function() {
+    function getTweets() {
         var term = $location.hash();
         console.log('finding tweets');
         return TweetService.getTweets(term)
@@ -63,6 +68,8 @@ function TweetController($location, TweetService) {
                 vm.msg = data.msg;
             });
     };
+
+    getTweets();
 };
 
 function WikiController($location, WikiPageService) {
@@ -71,12 +78,16 @@ function WikiController($location, WikiPageService) {
     vm.error = false;
     vm.pages = []
 
-    this.getTitles = function() {
+    function getTitles() {
         var term = $location.hash();
         return WikiPageService.getTitles(term)
             .success(function(data, status, headers, config) {
                 vm.pages = data.titles;
                 vm.loaded = true;
+
+                for (i=0; i < vm.pages.length; ++i) {
+                    getPage(vm.pages[i]);
+                };
             })
             .error(function(data, status, headers, config) {
                 vm.error = true;
@@ -84,7 +95,7 @@ function WikiController($location, WikiPageService) {
             });
     };
 
-    this.getPage = function(page) {
+    function getPage(page) {
         console.log("Loading summary for " + page.title);
         return WikiPageService.getPage(page.title)
             .success(function(data, status, headers, config) {
@@ -94,6 +105,8 @@ function WikiController($location, WikiPageService) {
                 page.summary = data.msg
             });
     }
+
+    getTitles();
 };
 
 app.factory('TweetService', TweetService);
