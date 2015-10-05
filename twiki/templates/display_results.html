@@ -40,7 +40,7 @@
                     <p ng-if="page.summary">{a page.summary a}</p>
                 </li>
             </ul>
-            <div ng-show='wikier.loaded && wikier.titles.length < 1' class='alert alert-info'>
+            <div ng-show='wikier.loaded && wikier.pages.length < 1' class='alert alert-info'>
                 <p>Unbelievable! Couldn't find any wikipedia pages for that!</p>
             </div>
             <div ng-show='wikier.error' class='alert alert-danger'>
