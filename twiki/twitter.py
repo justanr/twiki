@@ -53,9 +53,9 @@ class Twitter(object):
         return 'https://twitter.com/{0}/status/{1}'.format(username, status_id)
 
     @staticmethod
-    def _throw_from_tweepy_error(e, msg=None):
+    def _throw_from_tweepy_error(e, msg=None, code=500):
         "Converts a tweepy error into an application specific error"
         if msg is None:
             msg = e.reason
 
-        raise TwitterError(msg, 500)
+        raise TwitterError(msg, code)
