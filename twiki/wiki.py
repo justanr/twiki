@@ -31,19 +31,6 @@ class Wikipedia(object):
         """
         return self._transform_page(self._get_page(title))
 
-    def get_many_pages(self, *titles):
-        """Attempts to find many wikipedia pages with the get_page method but
-        ignores errors thrown during the process."""
-        pages = []
-
-        for title in titles:
-            try:
-                pages.append(self.get_page(title))
-            except WikipediaError:
-                pass
-
-        return pages
-
     def _search(self, term):
         "Attempts to search wikipedia for potentially matching pages"
         try:
