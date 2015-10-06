@@ -17,13 +17,13 @@ Considering that, data retrival is done immediately in the controller by simply 
 
 I can see why Angular is so popular and widely used. It allows the Javascript to provide all the logic while the HTML remains structural and present, compared to ReactJS where logic and display means can easily become muddled and the HTML is hidden inside render methods.
 
-The entire site could be made into a single page app, but Angular's hash based routing system doesn't quite fit in my headspace right now. In fact, the entire app could be built completely within Angular/Javascript without any backend, though I'd probably use the same stripped down API approach.
+~~The entire site could be made into a single page app, but Angular's hash based routing system doesn't quite fit in my headspace right now.~~ In fact, the entire app could be built completely within Angular/Javascript without any backend, though I'd probably use the same stripped down API approach. Update: 10/05/2015: Converted application to SPA style.
 
 The UI testing was done manually; however, looking into Javascript testing with something like Jasmine looks promising.
 
 ### UI Improvements
 
-Following up on SPA, a search bar on the results page would be nice, perhaps implemented with a delay to avoid bombarding the backend with requests as a new term is typed in. Suggesting previous search terms -- backed by Redis, for example -- beyond what the browser wants to provide is another potential feature.
+~~Following up on SPA, a search bar on the results page would be nice, perhaps implemented with a delay to avoid bombarding the backend with requests as a new term is typed in.~~ Suggesting previous search terms -- backed by Redis, for example -- beyond what the browser wants to provide is another potential feature.
 
 Beyond a SPA-style, the CSS could be greatly improved. Currently it's just a basic Bootstrap page complete with a nav bar culled from the bootstrap documentation.
 

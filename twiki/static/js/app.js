@@ -1,4 +1,4 @@
-var app = angular.module('app', [])
+var app = angular.module('app', ['ngMessages'])
 
 
 
@@ -50,58 +50,62 @@ function TermService($location) {
     return TermService;
 }
 
-function ResultNameController(TermService) {
-    vm = this;
-    vm.term = TermService.term;
-}
-
-function TweetController(TermService, TweetService) {
+function MainController(TweetService, WikiPageService) {
     var vm = this;
-    vm.loaded = false;
-    vm.error = false;
-    vm.tweets = [];
 
-    function getTweets() {
-        console.log('finding tweets');
-        return TweetService.getTweets(TermService.term)
+    vm.activated = false;
+
+    function init() {
+        vm.twitter = {
+            loaded: false,
+            error: false,
+            tweets: []
+        };
+
+        vm.wiki = {
+            loaded: false,
+            error: false,
+            pages: []
+        };
+
+    };
+
+    this.submit = function(term) {
+        init();
+        vm.activated = true;
+        getTweets(term);
+        getPages(term);
+    };
+
+    function getTweets(term) {
+        return TweetService.getTweets(term)
             .success(function(data, status, headers, config) {
-                console.log('loaded tweets');
-                vm.loaded = true;
-                vm.tweets = data.tweets
+                vm.twitter.loaded = true;
+                vm.twitter.tweets = data.tweets
             })
             .error(function(data, status, headers, config) {
-                vm.error = true;
-                vm.msg = data.msg;
+                vm.twitter.error = true;
+                vm.twitter.msg = data.msg;
             });
     };
 
-    getTweets();
-};
-
-function WikiController(TermService, WikiPageService) {
-    var vm = this;
-    vm.loaded = false;
-    vm.error = false;
-    vm.pages = []
-
-    function getTitles() {
-        return WikiPageService.getTitles(TermService.term)
+    function getPages(term) {
+        return WikiPageService.getTitles(term)
             .success(function(data, status, headers, config) {
-                vm.pages = data.titles;
-                vm.loaded = true;
+                vm.wiki.pages = data.titles;
+                vm.wiki.loaded = true;
 
-                for (i=0; i < vm.pages.length; ++i) {
-                    getPage(vm.pages[i]);
+                for (i=0; i < vm.wiki.pages.length; ++i) {
+                    getPage(vm.wiki.pages[i]);
                 };
             })
             .error(function(data, status, headers, config) {
-                vm.error = true;
-                vm.msg = data.msg;
+                vm.wiki.error = true;
+                vm.wiki.msg = data.msg;
             });
     };
 
     function getPage(page) {
-        console.log("Loading summary for " + page.title);
         return WikiPageService.getPage(page.title)
             .success(function(data, status, headers, config) {
                 page.summary = data.page.summary
@@ -110,13 +114,9 @@ function WikiController(TermService, WikiPageService) {
                 page.summary = data.msg
             });
     }
-
-    getTitles();
 };
 
 app.factory('TweetService', TweetService);
 app.factory('WikiPageService', WikiPageService);
 app.factory('TermService', TermService);
-app.controller('TweetController', TweetController);
-app.controller('WikiController', WikiController);
-app.controller('ResultNameController', ResultNameController);
+app.controller('MainController', MainController);

@@ -3,12 +3,76 @@
 {% block title %}{{ super() }} Search!{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
+<div class="jumbotron" ng-controller="MainController as main">
     <div class="container">
-        {{ util.flashed_messages() }}
-        <h1>Ready to do a search?</h1>
-        <p>Enter a search term below and we'll crawl twitter and wikipedia!</p>
-        {{ wtf.quick_form(form) }}
+        <div class="page-header">
+            <h1>Twiki</h1>
+            <p>A unified Twitter-Wikipedia searcher. Enter a term below and see what pops out.</p>
+        </div>
+        <form name="SearchForm" class="form-inline" ng-submit="main.submit(term.term)"> 
+            <div class="input-group col-md-6 col-xs-6">
+                <input class="form-control" id="term" name="term"
+                       ng-required="true" ng-model="term.term"
+                       placeholder="What do you want to search for?" />
+                <div ng-messages="RegisterForm.term.$error">
+                    <span ng-message="required" class="help-block">A search term is required</span>
+                </div>
+            </div>
+            <div class="input-group col-md-2 col-xs-2">
+                <button class="btn btn-primary" type="submit" ng-disabled="SearchForm.$invalid">
+                    Let's go find it!
+                </button>
+           </div>
+        </form>
+    </div>
+
+    <div ng-show="main.activated" class="container">
+        <div class="col-md-6">
+            <h2>Tweets</h2>
+            <div class="alert alert-info" ng-hide="main.twitter.loaded || main.twitter.error">
+                <p>Looking for tweets...</p>
+            </div>
+            
+            <ul class="list-group" ng-show="main.twitter.loaded && main.twitter.tweets.length > 0">
+                <li class="list-group-item" ng-repeat="tweet in main.twitter.tweets">
+                    <h3><a href="{a tweet.url a}">
+                            {a tweet.user a} said
+                    </a></h3>
+                    <p>{a tweet.text a}</p>
+                </li>
+            </ul>
+
+            <div class="alert alert-info" ng-show="main.twitter.loaded && main.twitter.tweets.length === 0">
+                <p>Unblievable! Couldn't find any tweets!</p>
+            </div>
+
+            <div class="alert alert-warning" ng-show="main.twitter.error">
+                {a main.twitter.msg a}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <h2>Wikipedia Pages</h2>
+            <div class="alert alert-info" ng-hide="main.wiki.loaded || main.wiki.error">
+                <p>Looking for Wikipedia pages...</p>
+            </div>
+            
+            <ul class="list-group" ng-show="main.wiki.loaded && main.wiki.pages.length > 0">
+                <li class="list-group-item" ng-repeat="page in main.wiki.pages">
+                    <h3><a href="{a page.url a}">{a page.title a}</a></h3>
+                    <p ng-show="!page.summary">Loading summary...</p>
+                    <p ng-show="page.summary">{a page.summary a}</p>
+                </li>
+            </ul>
+
+            <div class="alert alert-info" ng-show="main.wiki.loaded && main.wiki.pages.length === 0">
+                <p>Unblievable! Couldn't find any Wikipedia pages!</p>
+            </div>
+
+            <div class="alert alert-warning" ng-show="main.wiki.error">
+                {a main.wiki.msg a}
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
