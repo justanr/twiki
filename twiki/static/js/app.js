@@ -110,5 +110,4 @@ function MainController(TweetService, WikiPageService) {
 
 app.factory('TweetService', TweetService);
 app.factory('WikiPageService', WikiPageService);
-app.factory('TermService', TermService);
 app.controller('MainController', MainController);
