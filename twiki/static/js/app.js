@@ -42,14 +42,6 @@ function WikiPageService($http) {
     return WikiPageService
 }
 
-
-function TermService($location) {
-    var TermService = {};
-
-    TermService.term = $location.hash().split('+').join(' ');
-    return TermService;
-}
-
 function MainController(TweetService, WikiPageService) {
     var vm = this;
 
