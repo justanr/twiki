@@ -47,8 +47,6 @@ function MainController(TweetService, WikiPageService) {
 
     vm.activated = false;
 
-    vm.annyang = annyang
-
     function init() {
         vm.twitter = {
             loaded: false,
@@ -109,9 +107,8 @@ function MainController(TweetService, WikiPageService) {
             });
     }
 
-    vm.annyang.debug();
-    vm.annyang.addCommands({"search *val": this.submit});
-    vm.annyang.start();
+    annyang.debug();
+    annyang.addCommands({"search *val": this.submit});
 };
 
 app.factory('TweetService', TweetService);
